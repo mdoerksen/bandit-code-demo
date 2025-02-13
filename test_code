@@ -1,0 +1,46 @@
+import * as fs from 'fs';
+import * as http from 'http';
+
+// Vulnerability 1: Insecure use of eval
+function executeCode(code: string) {
+    eval(code); // Using eval can lead to code injection vulnerabilities
+}
+
+// Vulnerability 2: Insecure file read
+function readFile(filePath: string) {
+    fs.readFile(filePath, 'utf8', (err, data) => {
+        if (err) {
+            console.error('Error reading file:', err);
+            return;
+        }
+        console.log(data);
+    });
+}
+
+// Vulnerability 3: HTTP server without security headers
+const server = http.createServer((req, res) => {
+    res.writeHead(200);
+    res.end('Hello World');
+});
+
+// Vulnerability 4: SQL Injection (simulated)
+function getUser ById(userId: string) {
+    const query = `SELECT * FROM users WHERE id = '${userId}'`; // Vulnerable to SQL injection
+    // Execute query...
+}
+
+// Vulnerability 5: Insecure random number generation
+function getRandomNumber() {
+    return Math.random(); // Not cryptographically secure
+}
+
+// Start the server
+server.listen(3000, () => {
+    console.log('Server is running on http://localhost:3000');
+});
+
+// Example usage
+executeCode("console.log('Executed!')");
+readFile('/etc/passwd'); // Potentially dangerous file read
+getUser ById("1 OR 1=1"); // SQL Injection example
+console.log(getRandomNumber());
